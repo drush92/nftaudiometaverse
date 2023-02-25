@@ -27,12 +27,12 @@ function generateRandomNumber() {
   document.getElementById("blockchainToken").innerHTML = blockchainToken;
 
   // Update the synth's parameters based on the random number
-  synthParams.attack = parseInt(blockchainToken.charAt(0)) / 10; // Set attack time between 0 and 1 second
-  synthParams.release = parseInt(blockchainToken.charAt(7)) / 10; // Set release time between 0 and 1 second
+  synthParams.attack = parseInt(blockchainToken.substring(1, 4));
+  synthParams.release = parseInt(blockchainToken.substring(1, 4));
   synthParams.pitch = parseInt(blockchainToken.substring(1, 4)); // Set pitch between 0 and 999
 
   // Change the BPM based on the random number
-  var bpm = parseInt(blockchainToken.substring(4, 8)) / 100; // Set BPM between 0 and 999
+  var bpm = parseInt(blockchainToken.substring(1, 4)) / 100; // Set BPM between 0 and 999
   Tone.Transport.bpm.value = bpm;
 
   // Schedule changes in the synth's parameters
