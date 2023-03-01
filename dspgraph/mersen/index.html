@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>mersenne-twister</title>
+        <script type="module">
+            import fastMersenneTwister from 'https://cdn.skypack.dev/fast-mersenne-twister';
+          </script>
+    </head>
+<body>
+    <script>
+        const seed = '0xb3635C098B78FBEC4a9be0312D60E7f3b5d5B7d6'; // the seed string generated from the NFT data
+        
+        var myFastTwister = fastMersenneTwister( 1234567890 );
+
+        console.log( myFastTwister.random() ); // 0.6187947695143521
+
+    </script>
+</body>
+</html>
