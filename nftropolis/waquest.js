@@ -1,14 +1,49 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.124/build/three.module.js';
 import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/loaders/GLTFLoader.js';
-import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/OrbitControls.js';
+// import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/OrbitControls.js';
 import {PointerLockControls} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/PointerLockControls.js';
+
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
-var controls = new OrbitControls( camera, renderer.domElement );
+var controls = new PointerLockControls(camera, renderer.domElement);
+scene.add(controls.getObject());
+
+document.addEventListener('keydown', (event) => {
+    switch (event.code) {
+      case 'KeyW':
+        controls.moveForward(0.25);
+        break;
+      case 'KeyA':
+        controls.moveRight(-0.1);
+        break;
+      case 'KeyS':
+        controls.moveForward(-0.1);
+        break;
+      case 'KeyD':
+        controls.moveRight(0.1);
+        break;
+    }
+  });
+  
+  document.addEventListener('mousemove', (event) => {
+    if (controls.isLocked) {
+      const movementX = event.movementX || 0;
+      const movementY = event.movementY || 0;
+  
+      controls.rotateY(-movementX * 0.002);
+      controls.rotateX(-movementY * 0.002);
+    }
+  });
+  
+  document.addEventListener('click', () => {
+    controls.lock();
+  });
+
+  
 
 /* declare variables for the models
     IN THIS ORDER
@@ -96,8 +131,8 @@ var loader_tank = new GLTFLoader();
 loader_tank.load( './tank/scene.gltf', function ( gltf ) {
     tank = gltf.scene;
     scene.add( tank );
-    tank.scale.set(3, 3, 3)
-    tank.position.set(-120, 0, -18);
+    tank.scale.set(2, 2, 2)
+    tank.position.set(-118.5, 0, -16);
     tank.rotateY(1.6);
     scene.add( tank );
 });
@@ -126,7 +161,7 @@ var loader_carPolice = new GLTFLoader();
 loader_carPolice.load( './car_police/scene.gltf', function ( gltf ) {
     carPolice = gltf.scene;
     scene.add( carPolice );
-    carPolice.scale.set(1.6, 1.6, 1.6)
+    carPolice.scale.set(0.8, 0.8, 0.8)
     carPolice.position.set(-73, 0, -10);
     carPolice.rotateY(0);
     scene.add( carPolice );
@@ -143,7 +178,8 @@ loader_character.load( './character/scene.gltf', function ( gltf ) {
     scene.add( character );
     mixer = new THREE.AnimationMixer( character );
     const clips = gltf.animations;
-    character.position.set(-78, 0, -10);
+    character.scale.set(0.5, 0.5, 0.5)
+    character.position.set(-78, 0.11, -10);
     clips.forEach((clip) => {
         mixer.clipAction(clip).play();
 });
@@ -153,8 +189,8 @@ var loader_doctor = new GLTFLoader();
 loader_doctor.load( './doctor/scene.gltf', function ( gltf ) {
     doctor = gltf.scene;
     scene.add( doctor );
-    //doctor.scale.set(0.9, 0.9, 0.9)
-    doctor.position.set(11.5, 0, -44);
+    doctor.scale.set(0.5, 0.5, 0.5)
+    doctor.position.set(11.5, 0.11, -44);
     mixerDoctor = new THREE.AnimationMixer( doctor );
     const clipsDoctor = gltf.animations;
     clipsDoctor.forEach((clip) => {
@@ -166,8 +202,8 @@ var loader_basketballPlayer = new GLTFLoader();
 loader_basketballPlayer.load( './basketball_player/scene.gltf', function ( gltf ) {
     basketballPlayer = gltf.scene;
     scene.add( basketballPlayer );
-    basketballPlayer.scale.set(700, 700, 700)
-    basketballPlayer.position.set(-45, 0, -44);
+    basketballPlayer.scale.set(350, 350, 350)
+    basketballPlayer.position.set(-45, 0.11, -44);
     mixerBasketballPlayer = new THREE.AnimationMixer( basketballPlayer );
     const clipsBasketballPlayer = gltf.animations;
     clipsBasketballPlayer.forEach((clip) => {
@@ -192,8 +228,8 @@ var loader_soldier = new GLTFLoader();
 loader_soldier.load( './soldier/scene.gltf', function ( gltf ) {
     soldier = gltf.scene;
     scene.add( soldier );
-    soldier.scale.set(0.9, 0.9, 0.9)
-    soldier.position.set(-112, 0, -13);
+    soldier.scale.set(0.5, 0.5, 0.5)
+    soldier.position.set(-112, 0.11, -13);
     soldier.rotateY(1.6);
     mixerSoldier = new THREE.AnimationMixer( soldier );
     const clipsSoldier = gltf.animations;
@@ -206,7 +242,7 @@ var loader_hoodie = new GLTFLoader();
 loader_hoodie.load( './hoodie/scene.gltf', function ( gltf ) {
     hoodie = gltf.scene;
     scene.add( hoodie );
-    hoodie.scale.set(1.6, 1.6, 1.6)
+    hoodie.scale.set(1, 1, 1)
     hoodie.position.set(-170, 0, -20);
     mixerHoodie = new THREE.AnimationMixer( hoodie );
     const clipsHoodie = gltf.animations;
@@ -222,7 +258,7 @@ hemisphereLight.castShadow = true;
 hemisphereLight.intensity = 1.8;
 scene.add(hemisphereLight);
 
-camera.position.set(-90, 1.5, -12); // sets the position of the camera
+camera.position.set(-80, 1.5, 0); // sets the position of the camera
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)(); // creates a new audio context
 
@@ -306,7 +342,7 @@ var animate = function () {
 animate();
 
 /*
-NFTropolis is a unique virtual town where users can buy and own NFT characters that have randomized personality traits, 
+NFTropolis is a unique virtual town where users can own NFT characters that have randomized personality traits, 
 which influence the character's dialogue options and role in the overarching background story. These personalities are 
 recorded professionally and updated in patches as the story develops. As users interact with their characters to progress 
 the story, they earn points which can be attributed to skills/personality traits, which in turn affects the story's direction.
@@ -338,6 +374,9 @@ CHARACTERS:
 "Doctor" (https://skfb.ly/6QZ8M) by 3D-Models is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Looking around medical" (https://skfb.ly/ouzT8) by Appsbypaulhamilton is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Business Man - Low Polygon game character" (https://skfb.ly/6Ezvq) by manoeldarochadeoliveira is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+"Girl / Woman Character + Skeleton (.FBX & .OBJ)" (https://skfb.ly/oDRG9) by samsikua is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+if you find your work here and i haven't credited you, please let me know and i will add you to the list. alternatively,
+if you would like your work removed, please let me know and i will do so.
 */
 
