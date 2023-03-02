@@ -1,6 +1,6 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.124/build/three.module.js';
 import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/loaders/GLTFLoader.js';
-// import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/OrbitControls.js';
+//import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/OrbitControls.js';
 import {PointerLockControls} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/PointerLockControls.js';
 
 
@@ -9,8 +9,11 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
+//var controls = new OrbitControls(camera, renderer.domElement);
+
 var controls = new PointerLockControls(camera, renderer.domElement);
 scene.add(controls.getObject());
+
 
 document.addEventListener('keydown', (event) => {
     switch (event.code) {
@@ -43,7 +46,7 @@ document.addEventListener('keydown', (event) => {
     controls.lock();
   });
 
-  
+
 
 /* declare variables for the models
     IN THIS ORDER
@@ -58,6 +61,10 @@ var location;
 var market;
 
 var statue;
+
+var buildingFlats;
+
+var buildingWoka;
 
 var tank;
 
@@ -127,6 +134,26 @@ loader_statue.load( './statue/scene.gltf', function ( gltf ) {
     scene.add( statue );
 });
 
+var loader_buildingFlats = new GLTFLoader();
+loader_buildingFlats.load( './building_flats/scene.gltf', function ( gltf ) {
+    buildingFlats = gltf.scene;
+    scene.add( buildingFlats );
+    buildingFlats.scale.set(1, 1, 1);
+    buildingFlats.position.set(15, 0, 6);
+    buildingFlats.rotateY(0);
+    scene.add( buildingFlats );
+});
+
+var loader_buildingWoka = new GLTFLoader();
+loader_buildingWoka.load( './building_woka/scene.gltf', function ( gltf ) {
+    buildingWoka = gltf.scene;
+    scene.add( buildingWoka );
+    buildingWoka.scale.set(1, 1, 1);
+    buildingWoka.position.set(-85, 0, -8.2);
+    buildingWoka.rotateY(Math.PI / 2);
+    scene.add( buildingWoka );
+});
+
 var loader_tank = new GLTFLoader();
 loader_tank.load( './tank/scene.gltf', function ( gltf ) {
     tank = gltf.scene;
@@ -151,7 +178,7 @@ var loader_carMuscle = new GLTFLoader();
 loader_carMuscle.load( './car_muscle/scene.gltf', function ( gltf ) {
     carMuscle = gltf.scene;
     scene.add( carMuscle );
-    carMuscle.scale.set(4, 4, 4)
+    carMuscle.scale.set(2.1, 2.1, 2.1)
     carMuscle.position.set(-73, 0, -25);
     carMuscle.rotateY(0);
     scene.add( carMuscle );
@@ -252,8 +279,52 @@ loader_hoodie.load( './hoodie/scene.gltf', function ( gltf ) {
     }
 });
 
+// create wall geometry and material
+const wallGeometry = new THREE.BoxGeometry(120, 4.6, 0.5);
+const wallMaterial = new THREE.MeshBasicMaterial({
+  map: new THREE.TextureLoader().load('wall_texture1.png')
+});
+
+// create wall mesh and add to scene
+const wallMesh = new THREE.Mesh(wallGeometry, wallMaterial);
+wallMesh.position.set(-132.5, 2.3, 4.35); // set position of wall
+scene.add(wallMesh);
+
+const wallMesh2 = new THREE.Mesh(wallGeometry, wallMaterial);
+wallMesh2.position.set(-60, 2.3, 4.35); // set position of wall
+scene.add(wallMesh2);
+
+const wallMesh3 = new THREE.Mesh(wallGeometry, wallMaterial);
+wallMesh3.position.set(26, 2.3, 4.35); // set position of wall
+scene.add(wallMesh3);
+
+const wallMesh4 = new THREE.Mesh(wallGeometry, wallMaterial);
+wallMesh4.position.set(85.5, 2.3, -54.35); // set position of wall
+wallMesh4.rotateY(Math.PI / 2);
+scene.add(wallMesh4);
+
+const wallMesh5 = new THREE.Mesh(wallGeometry, wallMaterial);
+wallMesh5.position.set(-132.5, 2.3, -112); // set position of wall
+scene.add(wallMesh5);
+
+const wallMesh6 = new THREE.Mesh(wallGeometry, wallMaterial);
+wallMesh6.position.set(-60, 2.3, -112); // set position of wall
+scene.add(wallMesh6);
+
+const wallMesh7 = new THREE.Mesh(wallGeometry, wallMaterial);
+wallMesh7.position.set(26, 2.3, -112); // set position of wall
+scene.add(wallMesh7);
+
+const wallMesh8 = new THREE.Mesh(wallGeometry, wallMaterial);
+wallMesh8.position.set(-193, 2.3, -54.35); // set position of wall
+wallMesh8.rotateY(Math.PI / 2);
+scene.add(wallMesh8);
+
+
+
+
 const hemisphereLight = new THREE.HemisphereLight(0xffeeb1, 0x080820, 1);
-hemisphereLight.position.set(0, 50, 0);
+hemisphereLight.position.set(-50, 50, 0);
 hemisphereLight.castShadow = true;
 hemisphereLight.intensity = 1.8;
 scene.add(hemisphereLight);
@@ -295,6 +366,46 @@ audioFile_PoliceOfficer.onload = function() {
     });
 }
 audioFile_PoliceOfficer.send();
+
+const audioFileSteps = 'audio/stepping.wav';
+
+let sourceSteps;
+let isPlaying = false;
+
+function playSteps() {
+  if (isPlaying) return;
+
+  sourceSteps = audioCtx.createBufferSource();
+  sourceSteps.loop = true;
+
+  fetch(audioFileSteps)
+    .then(response => response.arrayBuffer())
+    .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+    .then(audioBuffer => {
+      sourceSteps.buffer = audioBuffer;
+      sourceSteps.connect(audioCtx.destination);
+      sourceSteps.start(0);
+      isPlaying = true;
+    });
+}
+
+function stopSteps() {
+  if (!isPlaying) return;
+  sourceSteps.stop(0);
+  isPlaying = false;
+}
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'w' && !isPlaying) {
+    playSteps();
+  }
+});
+
+document.addEventListener('keyup', function(event) {
+  if (event.key === 'w' && isPlaying) {
+    stopSteps();
+  }
+});
 
 document.addEventListener("click", function() {
     audioCtx.resume();
@@ -360,9 +471,11 @@ ever-changing story.
 LOCATION:
 "CCity Building Set 1" (https://skfb.ly/LpSC) by Neberkenezer is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
-PROPS:
+BUILDINGS & PROPS:
 "Low Poly Market" (https://skfb.ly/6CvFs) by Yanez Designs is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Statue of woman - Bern" (https://skfb.ly/NJCy) by w.bonato is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+"Building Set" (https://skfb.ly/NAJq) by nermin is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
+"Old City Building" (https://skfb.ly/6ZRtK) by Steve Morrison is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
 
 VEHICLES:
 "Transformers Universe: Army Truck" (https://skfb.ly/otyvo) by Primus03 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
