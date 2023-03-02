@@ -1,0 +1,11 @@
+Model Information:
+* title:	Looking around medical
+* source:	https://sketchfab.com/3d-models/looking-around-medical-5d2543fe1382487fa211ffe1424dbdae
+* author:	Appsbypaulhamilton (https://sketchfab.com/Appsbypaulhamilton)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Looking around medical" (https://sketchfab.com/3d-models/looking-around-medical-5d2543fe1382487fa211ffe1424dbdae) by Appsbypaulhamilton (https://sketchfab.com/Appsbypaulhamilton) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Soldier fully rigged character
+* source:	https://sketchfab.com/3d-models/soldier-fully-rigged-character-d5ee1b51099741d2b5e4010f4f781263
+* author:	Bad boy for life (https://sketchfab.com/AnnonymousCreator)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Soldier fully rigged character" (https://sketchfab.com/3d-models/soldier-fully-rigged-character-d5ee1b51099741d2b5e4010f4f781263) by Bad boy for life (https://sketchfab.com/AnnonymousCreator) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
