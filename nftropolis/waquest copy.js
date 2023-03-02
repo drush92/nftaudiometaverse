@@ -143,7 +143,7 @@ loader_character.load( './character/scene.gltf', function ( gltf ) {
     scene.add( character );
     mixer = new THREE.AnimationMixer( character );
     const clips = gltf.animations;
-    character.position.set(-78, 0, -10);
+    character.position.set(-96, 0, -25);
     clips.forEach((clip) => {
         mixer.clipAction(clip).play();
 });
@@ -154,7 +154,7 @@ loader_doctor.load( './doctor/scene.gltf', function ( gltf ) {
     doctor = gltf.scene;
     scene.add( doctor );
     //doctor.scale.set(0.9, 0.9, 0.9)
-    doctor.position.set(11.5, 0, -44);
+    doctor.position.set(-94, 0, -25);
     mixerDoctor = new THREE.AnimationMixer( doctor );
     const clipsDoctor = gltf.animations;
     clipsDoctor.forEach((clip) => {
@@ -167,7 +167,7 @@ loader_basketballPlayer.load( './basketball_player/scene.gltf', function ( gltf 
     basketballPlayer = gltf.scene;
     scene.add( basketballPlayer );
     basketballPlayer.scale.set(700, 700, 700)
-    basketballPlayer.position.set(-45, 0, -44);
+    basketballPlayer.position.set(-92, 0, -26);
     mixerBasketballPlayer = new THREE.AnimationMixer( basketballPlayer );
     const clipsBasketballPlayer = gltf.animations;
     clipsBasketballPlayer.forEach((clip) => {
@@ -179,8 +179,8 @@ var loader_businessman = new GLTFLoader();
 loader_businessman.load( './businessman/scene.gltf', function ( gltf ) {
     businessman = gltf.scene;
     scene.add( businessman );
-    businessman.scale.set(0.9, 0.9, 0.9)
-    businessman.position.set(-95, 0, -38);
+    businessman.scale.set(1.7, 1.7, 1.7)
+    businessman.position.set(-90, 0, -25);
     mixerBusinessman = new THREE.AnimationMixer( businessman );
     const clipsBusinessman = gltf.animations;
     clipsBusinessman.forEach((clip) => {
@@ -193,8 +193,7 @@ loader_soldier.load( './soldier/scene.gltf', function ( gltf ) {
     soldier = gltf.scene;
     scene.add( soldier );
     soldier.scale.set(0.9, 0.9, 0.9)
-    soldier.position.set(-112, 0, -13);
-    soldier.rotateY(1.6);
+    soldier.position.set(-88, 0, -25);
     mixerSoldier = new THREE.AnimationMixer( soldier );
     const clipsSoldier = gltf.animations;
     clipsSoldier.forEach((clip) => {
@@ -207,7 +206,7 @@ loader_hoodie.load( './hoodie/scene.gltf', function ( gltf ) {
     hoodie = gltf.scene;
     scene.add( hoodie );
     hoodie.scale.set(1.6, 1.6, 1.6)
-    hoodie.position.set(-170, 0, -20);
+    hoodie.position.set(-86, 0, -25);
     mixerHoodie = new THREE.AnimationMixer( hoodie );
     const clipsHoodie = gltf.animations;
     const castSpellClip = THREE.AnimationClip.findByName(clipsHoodie, "Armature|Cast Spell");
