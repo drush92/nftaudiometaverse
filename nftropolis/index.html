@@ -3,17 +3,25 @@
 <head>
     <title>NFTropolis</title>
     <script src="https://tonejs.github.io/build/Tone.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="near-character">
+    <div class="dialogue" id="near-character" style="display:none;">
       Officer Donut: "Welcome to NFTropolis citizen. Look, I know you're new here, but you're going to have to pay the toll to get into the city."<br>
       Respond:<br>
         <button class="int_btn1">Pay Toll</button>
-        <button class="int_btn1">Run</button><br>
+        <button class="int_btn1" id="select-character-run">Run</button><br>
         <i>Press 'ESC' to select</i>
       </div>
+
+      <div class="dialogue" id="character-run" style="display: none;">
+        Officer Donut: "Oi! You can't run from your responsibilities! Next time I see you I'll probably just shoot you."
+        </div>
+
 </body>
+<script src="speechmenu.js"></script>
 <script type="module" src="waquest.js"></script>
 <script type="module" src="waqaudio.js"></script>
+
 </html>

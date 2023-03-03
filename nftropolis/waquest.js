@@ -527,8 +527,8 @@ document.addEventListener("click", function() {
     audioCtx.resume();
     //sound.play();
     sound.setLoop(false);
-    soundCarMuscle.play();
-    soundCarMuscle.setLoop( true );
+    //soundCarMuscle.play();
+    //soundCarMuscle.setLoop( true );
     soundFountain.play();
     soundFountain.setLoop( true );
     soundRollercoaster.play();
@@ -538,7 +538,6 @@ document.addEventListener("click", function() {
 const characterPosition = new THREE.Vector3(-78, 0.11, -10);
 const distanceToShow = 3.5;
 const nearCharacter = document.getElementById('near-character');
-
 
 var animate = function () {
     requestAnimationFrame( animate );
@@ -586,6 +585,7 @@ var animate = function () {
     
       // Check the distance to the character object
   const distanceToCharacter = camera.position.distanceTo(characterPosition);
+  const distanceToCarMuscle = camera.position.distanceTo(carMuscle.position);
   if (distanceToCharacter < distanceToShow) {
     nearCharacter.style.display = 'block';
   } else {
@@ -596,6 +596,12 @@ var animate = function () {
     sound.setLoop(false);
   } else {
   }
+  if (distanceToCarMuscle < distanceToShow) {
+    soundCarMuscle.play();
+  } else {
+  }
+
+  
 
     renderer.render( scene, camera );
 
