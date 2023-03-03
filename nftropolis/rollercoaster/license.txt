@@ -1,0 +1,11 @@
+Model Information:
+* title:	#15 "The Fall" 3December2019
+* source:	https://sketchfab.com/3d-models/15-the-fall-3december2019-944ae8b39a644addab31ce99bf4ae0fa
+* author:	Canary Games (https://sketchfab.com/CapAlatriste)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "#15 "The Fall" 3December2019" (https://sketchfab.com/3d-models/15-the-fall-3december2019-944ae8b39a644addab31ce99bf4ae0fa) by Canary Games (https://sketchfab.com/CapAlatriste) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

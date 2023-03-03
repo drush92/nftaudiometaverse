@@ -51,7 +51,7 @@ document.addEventListener('keydown', (event) => {
 /* declare variables for the models
     IN THIS ORDER
     1. location
-    2. props
+    2. props / buildings
     3. vehicles
     4. characters
 */
@@ -59,37 +59,33 @@ document.addEventListener('keydown', (event) => {
 var location;
 
 var market;
-
 var statue;
+var fountain;
+var mixerFountain;
+var rollercoaster;
+var mixerRollercoaster;
 
 var buildingFlats;
-
 var buildingWoka;
+var buildingWoodbros;
+var buildingShop;
 
 var tank;
-
 var helicopter;
-
 var carMuscle;
-
 var carPolice;
 var mixerCarPolice;
 
 var character;
 var mixer;
-
 var doctor;
 var mixerDoctor;
-
 var basketballPlayer;
 var mixerBasketballPlayer;
-
 var businessman;
 var mixerBusinessman;
-
 var soldier;
 var mixerSoldier;
-
 var hoodie;
 var mixerHoodie;
 
@@ -111,9 +107,9 @@ var loader_market = new GLTFLoader();
 loader_market.load( './market/scene.gltf', function ( gltf ) {
     market = gltf.scene;
     scene.add( market );
-    market.scale.set(0.016, 0.016, 0.016);
-    market.position.set(-170, 0, -25);
-    market.rotateY(3);
+    market.scale.set(0.01, 0.01, 0.01);
+    market.position.set(-170, 0, -1);
+    market.rotateY(0);
     scene.add( market );
     market.traverse((child) => {
         if (child instanceof THREE.Mesh) {
@@ -134,12 +130,40 @@ loader_statue.load( './statue/scene.gltf', function ( gltf ) {
     scene.add( statue );
 });
 
+var loader_fountain = new GLTFLoader();
+loader_fountain.load( './fountain/scene.gltf', function ( gltf ) {
+    fountain = gltf.scene;
+    scene.add( fountain );
+    fountain.scale.set(1.75, 1.75, 1.75);
+    fountain.position.set(-27.5, 0.11, -28);
+    fountain.rotateY(1.6);
+    mixerFountain = new THREE.AnimationMixer(fountain);
+    const clipsFountain = gltf.animations;
+    clipsFountain.forEach((clip) => {
+        mixerFountain.clipAction(clip).play();
+    });
+});
+
+var loader_rollercoaster = new GLTFLoader();
+loader_rollercoaster.load( './rollercoaster/scene.gltf', function ( gltf ) {
+    rollercoaster = gltf.scene;
+    scene.add( rollercoaster );
+    rollercoaster.scale.set(1, 1, 1);
+    rollercoaster.position.set(40, 0, -105);
+    rollercoaster.rotateY(-1.6);
+    mixerRollercoaster = new THREE.AnimationMixer(rollercoaster);
+    const clipsRollercoaster = gltf.animations;
+    clipsRollercoaster.forEach((clip) => {
+        mixerRollercoaster.clipAction(clip).play();
+    });
+});
+
 var loader_buildingFlats = new GLTFLoader();
 loader_buildingFlats.load( './building_flats/scene.gltf', function ( gltf ) {
     buildingFlats = gltf.scene;
     scene.add( buildingFlats );
     buildingFlats.scale.set(1, 1, 1);
-    buildingFlats.position.set(15, 0, 6);
+    buildingFlats.position.set(6.2, 0, 6);
     buildingFlats.rotateY(0);
     scene.add( buildingFlats );
 });
@@ -152,6 +176,26 @@ loader_buildingWoka.load( './building_woka/scene.gltf', function ( gltf ) {
     buildingWoka.position.set(-85, 0, -8.2);
     buildingWoka.rotateY(Math.PI / 2);
     scene.add( buildingWoka );
+});
+
+var loader_buildingWoodbros = new GLTFLoader();
+loader_buildingWoodbros.load( './building_woodbros/scene.gltf', function ( gltf ) {
+    buildingWoodbros = gltf.scene;
+    scene.add( buildingWoodbros );
+    buildingWoodbros.scale.set(8, 8, 8);
+    buildingWoodbros.position.set(-53, 0, -29);
+    buildingWoodbros.rotateY(Math.PI / 1);
+    scene.add( buildingWoodbros );
+});
+
+var loader_buildingShop = new GLTFLoader();
+loader_buildingShop.load( './building_shop/scene.gltf', function ( gltf ) {
+    buildingShop = gltf.scene;
+    scene.add( buildingShop );
+    buildingShop.scale.set(29, 29, 29);
+    buildingShop.position.set(-95, 0, -5.8);
+    buildingShop.rotateY(Math.PI / 2);
+    scene.add( buildingShop );
 });
 
 var loader_tank = new GLTFLoader();
@@ -169,7 +213,7 @@ loader_helicopter.load( './helicopter/scene.gltf', function ( gltf ) {
     helicopter = gltf.scene;
     scene.add( helicopter );
     helicopter.scale.set(3, 3, 3)
-    helicopter.position.set(-55, 0.5, -18);
+    helicopter.position.set(60, 0.5, -18);
     helicopter.rotateY(0);
     scene.add( helicopter );
 });
@@ -279,7 +323,7 @@ loader_hoodie.load( './hoodie/scene.gltf', function ( gltf ) {
     }
 });
 
-// create wall geometry and material
+// create surrounding wall geometry and material
 const wallGeometry = new THREE.BoxGeometry(120, 4.6, 0.5);
 const wallMaterial = new THREE.MeshBasicMaterial({
   map: new THREE.TextureLoader().load('wall_texture1.png')
@@ -400,6 +444,42 @@ scene.add( meshCarMuscle );
 // finally add the sound to the mesh
 meshCarMuscle.add( soundCarMuscle );
 
+const soundFountain = new THREE.PositionalAudio( listener );
+
+const audioLoaderFountain = new THREE.AudioLoader();
+audioLoaderFountain.load( 'audio/fountain.wav', function( buffer ) {
+  soundFountain.setBuffer( buffer );
+  soundFountain.setRefDistance( 0.5 );
+  soundFountain.setMaxDistance( 0.01 );
+  soundFountain.setRollOffFactor( 0.1 );
+});
+
+const sphereFountain = new THREE.SphereGeometry( 0.001, 0.001, 0.001 );
+const materialFountain = new THREE.MeshPhongMaterial( { color: 0xff2200 } );
+const meshFountain = new THREE.Mesh( sphereFountain, materialFountain );
+meshFountain.position.set(-27.5, 0.11, -28);
+scene.add( meshFountain );
+
+meshFountain.add( soundFountain );
+
+const soundRollercoaster = new THREE.PositionalAudio( listener );
+
+const audioLoaderRollercoaster = new THREE.AudioLoader();
+audioLoaderRollercoaster.load( 'audio/rollercoaster.wav', function( buffer ) {
+  soundRollercoaster.setBuffer( buffer );
+  soundRollercoaster.setRefDistance( 1 );
+  soundRollercoaster.setMaxDistance( 0.01 );
+  soundRollercoaster.setRollOffFactor( 0.1 );
+});
+
+const sphereRollercoaster = new THREE.SphereGeometry( 0.001, 0.001, 0.001 );
+const materialRollercoaster = new THREE.MeshPhongMaterial( { color: 0xff2200 } );
+const meshRollercoaster = new THREE.Mesh( sphereRollercoaster, materialRollercoaster );
+meshRollercoaster.position.set(40, 0, -105);
+scene.add( meshRollercoaster );
+
+meshRollercoaster.add( soundRollercoaster );
+
 const audioFileSteps = 'audio/stepping.wav';
 
 let sourceSteps;
@@ -446,11 +526,22 @@ document.addEventListener("click", function() {
     sound.setLoop( true );
     soundCarMuscle.play();
     soundCarMuscle.setLoop( true );
+    soundFountain.play();
+    soundFountain.setLoop( true );
+    soundRollercoaster.play();
+    soundRollercoaster.setLoop( true );
 });
 
 
 var animate = function () {
     requestAnimationFrame( animate );
+    if (mixerFountain) {
+        mixerFountain.update(clock.getDelta());
+      }
+    if (mixerRollercoaster) {
+        mixerRollercoaster.update(clock.getDelta());
+      }
+      mixerRollercoaster.timeScale = 10000;
     if (mixer) {
         mixer.update(clock.getDelta());
       }
@@ -513,6 +604,8 @@ BUILDINGS & PROPS:
 "Statue of woman - Bern" (https://skfb.ly/NJCy) by w.bonato is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Building Set" (https://skfb.ly/NAJq) by nermin is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
 "Old City Building" (https://skfb.ly/6ZRtK) by Steve Morrison is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+"Background building 3" (https://skfb.ly/oCKGN) by Trueno is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+"#15 "The Fall" 3December2019" (https://skfb.ly/6SorR) by Canary Games is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
 VEHICLES:
 "Transformers Universe: Army Truck" (https://skfb.ly/otyvo) by Primus03 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
@@ -525,6 +618,9 @@ CHARACTERS:
 "Looking around medical" (https://skfb.ly/ouzT8) by Appsbypaulhamilton is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Business Man - Low Polygon game character" (https://skfb.ly/6Ezvq) by manoeldarochadeoliveira is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Girl / Woman Character + Skeleton (.FBX & .OBJ)" (https://skfb.ly/oDRG9) by samsikua is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+SOUND:
+Fairgrounds: Rides - Cobra rollercoaster - from side of track - May '1985 (recorded West Midlands Safari Park) (5F4,reprocessed)- https://sound-effects.bbcrewind.co.uk/search?q=rollercoaster
 
 if you find your work here and i haven't credited you, please let me know and i will add you to the list. alternatively,
 if you would like your work removed, please let me know and i will do so.

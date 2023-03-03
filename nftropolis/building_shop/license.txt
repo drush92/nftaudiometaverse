@@ -1,0 +1,11 @@
+Model Information:
+* title:	Building + shop
+* source:	https://sketchfab.com/3d-models/building-shop-3ada9b02bf6c4227a6e3453ab027f508
+* author:	vishal gawde (https://sketchfab.com/vishal24)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Building + shop" (https://sketchfab.com/3d-models/building-shop-3ada9b02bf6c4227a6e3453ab027f508) by vishal gawde (https://sketchfab.com/vishal24) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
