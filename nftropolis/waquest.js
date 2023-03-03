@@ -333,39 +333,72 @@ camera.position.set(-80, 1.5, 0); // sets the position of the camera
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)(); // creates a new audio context
 
-const source_PoliceOfficer = audioCtx.createBufferSource(); // creates a new audio source
-let buffer_PoliceOfficer;
+// create audio source and gain node
+const source = audioCtx.createBufferSource();
+const gainNode = audioCtx.createGain();
 
-const panner_PoliceOfficer = audioCtx.createPanner();
-panner_PoliceOfficer.panningModel = 'HRTF';
-panner_PoliceOfficer.distanceModel = 'inverse';
-panner_PoliceOfficer.refDistance = 20;
-panner_PoliceOfficer.maxDistance = 100;
-panner_PoliceOfficer.rolloffFactor = 1;
-panner_PoliceOfficer.coneInnerAngle = 360;
-panner_PoliceOfficer.coneOuterAngle = 0;
-panner_PoliceOfficer.coneOuterGain = 0;
-panner_PoliceOfficer.setPosition(0, 0, -25);
+// load audio file
+const request = new XMLHttpRequest();
+request.open('GET', 'audio/background.wav', true);
+request.responseType = 'arraybuffer';
+request.onload = function() {
+  audioCtx.decodeAudioData(request.response, function(buffer) {
+    source.buffer = buffer;
+    source.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    gainNode.gain.value = 0.01;
+    // start audio source when buffer is loaded
+    source.start(0);
+  });
+};
+request.send();
 
-const gain_PoliceOfficer = audioCtx.createGain();
-gain_PoliceOfficer.gain.value = 0.5;
+// create an AudioListener and add it to the camera
+const listener = new THREE.AudioListener();
+camera.add( listener );
 
-source_PoliceOfficer.connect(panner_PoliceOfficer);
-panner_PoliceOfficer.connect(gain_PoliceOfficer);
-gain_PoliceOfficer.connect(audioCtx.destination);
+// create the PositionalAudio object (passing in the listener)
+const sound = new THREE.PositionalAudio( listener );
 
-const audioFile_PoliceOfficer = new XMLHttpRequest();
-audioFile_PoliceOfficer.open('GET', 'audio/police_officer.wav', true);
-audioFile_PoliceOfficer.responseType = 'arraybuffer';
-audioFile_PoliceOfficer.onload = function() {
-    audioCtx.decodeAudioData(audioFile_PoliceOfficer.response, function(buffer) {
-        buffer_PoliceOfficer = buffer;
-        source_PoliceOfficer.buffer = buffer;
-        source_PoliceOfficer.loop = true;
-        source_PoliceOfficer.start();
-    });
-}
-audioFile_PoliceOfficer.send();
+// load a sound and set it as the PositionalAudio object's buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load( 'audio/police_officer.wav', function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setRefDistance( 0.1 );
+  sound.setMaxDistance( 0.01 );
+  sound.setRollOffFactor( 0.1 );
+});
+
+// create an object for the sound to play from
+const sphere = new THREE.SphereGeometry( 0.001, 0.001, 0.001 );
+const material = new THREE.MeshPhongMaterial( { color: 0xff2200 } );
+const mesh = new THREE.Mesh( sphere, material );
+mesh.position.set(-78, 0.11, -10);
+scene.add( mesh );
+
+// finally add the sound to the mesh
+mesh.add( sound );
+
+const soundCarMuscle = new THREE.PositionalAudio( listener );
+
+// load a sound and set it as the PositionalAudio object's buffer
+const audioLoaderCarMuscle = new THREE.AudioLoader();
+audioLoaderCarMuscle.load( 'audio/car_muscle.wav', function( buffer ) {
+  soundCarMuscle.setBuffer( buffer );
+  soundCarMuscle.setRefDistance( 1 );
+  soundCarMuscle.setMaxDistance( 0.01 );
+  soundCarMuscle.setRollOffFactor( 0.1 );
+});
+
+// create an object for the sound to play from
+const sphereCarMuscle = new THREE.SphereGeometry( 0.001, 0.001, 0.001 );
+const materialCarMuscle = new THREE.MeshPhongMaterial( { color: 0xff2200 } );
+const meshCarMuscle = new THREE.Mesh( sphereCarMuscle, materialCarMuscle );
+meshCarMuscle.position.set(-73, 0, -25);
+scene.add( meshCarMuscle );
+
+// finally add the sound to the mesh
+meshCarMuscle.add( soundCarMuscle );
 
 const audioFileSteps = 'audio/stepping.wav';
 
@@ -409,6 +442,10 @@ document.addEventListener('keyup', function(event) {
 
 document.addEventListener("click", function() {
     audioCtx.resume();
+    sound.play();
+    sound.setLoop( true );
+    soundCarMuscle.play();
+    soundCarMuscle.setLoop( true );
 });
 
 
@@ -441,10 +478,10 @@ var animate = function () {
         mixerHoodie.update(clock.getDelta());
         }
         mixerHoodie.timeScale = 100;
-    var distance_PoliceOfficer = camera.position.distanceTo(character.position);
-    var maxDistance_PoliceOfficer = 10;
-    gain_PoliceOfficer.gain.value = Math.max(0, 1 - (distance_PoliceOfficer / maxDistance_PoliceOfficer))
-    panner_PoliceOfficer.setPosition(camera.position.x, camera.position.y, camera.position.z);
+    //var distance_PoliceOfficer = camera.position.distanceTo(character.position);
+    //var maxDistance_PoliceOfficer = 10;
+    //gain_PoliceOfficer.gain.value = Math.max(0, 1 - (distance_PoliceOfficer / maxDistance_PoliceOfficer))
+    //panner_PoliceOfficer.setPosition(camera.position.x, camera.position.y, camera.position.z);
     
     renderer.render( scene, camera );
 
