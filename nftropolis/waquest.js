@@ -485,6 +485,10 @@ const audioFileSteps = 'audio/stepping.wav';
 let sourceSteps;
 let isPlaying = false;
 
+var gainSteps = audioCtx.createGain();
+gainSteps.gain.value = 0.2;
+gainSteps.connect(audioCtx.destination);
+
 function playSteps() {
   if (isPlaying) return;
 
@@ -496,7 +500,7 @@ function playSteps() {
     .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
     .then(audioBuffer => {
       sourceSteps.buffer = audioBuffer;
-      sourceSteps.connect(audioCtx.destination);
+      sourceSteps.connect(gainSteps);
       sourceSteps.start(0);
       isPlaying = true;
     });
@@ -531,7 +535,6 @@ document.addEventListener("click", function() {
     soundRollercoaster.play();
     soundRollercoaster.setLoop( true );
 });
-
 
 var animate = function () {
     requestAnimationFrame( animate );
