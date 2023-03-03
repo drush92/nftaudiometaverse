@@ -423,6 +423,23 @@ scene.add( mesh );
 // finally add the sound to the mesh
 mesh.add( sound );
 
+const soundSoldier = new THREE.PositionalAudio( listener );
+const audioLoaderSoldier = new THREE.AudioLoader();
+audioLoaderSoldier.load( 'audio/soldier.wav', function( buffer ) {
+  soundSoldier.setBuffer( buffer );
+  soundSoldier.setRefDistance( 0.1 );
+  soundSoldier.setMaxDistance( 0.01 );
+  soundSoldier.setRollOffFactor( 0.1 );
+});
+
+const sphereSoldier = new THREE.SphereGeometry( 0.001, 0.001, 0.001 );
+const materialSoldier = new THREE.MeshPhongMaterial( { color: 0xff2200 } );
+const meshSoldier = new THREE.Mesh( sphereSoldier, materialSoldier );
+meshSoldier.position.set(-112, 0.11, -13);
+scene.add( meshSoldier );
+
+meshSoldier.add( soundSoldier );
+
 const soundCarMuscle = new THREE.PositionalAudio( listener );
 
 // load a sound and set it as the PositionalAudio object's buffer
@@ -541,6 +558,7 @@ const distanceToShow = 3.5;
 const nearCharacter = document.getElementById('near-character');
 const characterRun = document.getElementById('character-run');
 const characterPayToll = document.getElementById('character-pay-toll');
+const nearSoldier = document.getElementById('near-soldier');
 
 function changeAudio() {
   console.log('Button clicked!');
@@ -611,22 +629,32 @@ var animate = function () {
       // Check the distance to the character object
   const distanceToCharacter = camera.position.distanceTo(characterPosition);
   const distanceToCarMuscle = camera.position.distanceTo(carMuscle.position);
+  const distanceToSoldier = camera.position.distanceTo(soldier.position);
   if (distanceToCharacter < distanceToShow) {
     nearCharacter.style.display = 'block';
+    sound.play();
+    sound.setLoop(false);
   } else {
     nearCharacter.style.display = 'none';
     characterRun.style.display = 'none';
     characterPayToll.style.display = 'none';
   }
   if (distanceToCharacter < distanceToShow) {
-    sound.play();
-    sound.setLoop(false);
+    
   } else {
   }
   if (distanceToCarMuscle < distanceToShow) {
     soundCarMuscle.play();
   } else {
   }
+
+  if (distanceToSoldier < distanceToShow) {
+    nearSoldier.style.display = 'block';
+    soundSoldier.play();
+  } else {
+    nearSoldier.style.display = 'none';
+  }
+
 
     renderer.render( scene, camera );
 
