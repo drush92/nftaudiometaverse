@@ -3,7 +3,6 @@ import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/
 //import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/OrbitControls.js';
 import {PointerLockControls} from 'https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/PointerLockControls.js';
 
-
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 var renderer = new THREE.WebGLRenderer();
@@ -335,7 +334,7 @@ wallMesh.position.set(-132.5, 2.3, 4.35); // set position of wall
 scene.add(wallMesh);
 
 const wallMesh2 = new THREE.Mesh(wallGeometry, wallMaterial);
-wallMesh2.position.set(-60, 2.3, 4.35); // set position of wall
+wallMesh2.position.set(-60, 2.3, 4.15); // set position of wall
 scene.add(wallMesh2);
 
 const wallMesh3 = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -352,7 +351,7 @@ wallMesh5.position.set(-132.5, 2.3, -112); // set position of wall
 scene.add(wallMesh5);
 
 const wallMesh6 = new THREE.Mesh(wallGeometry, wallMaterial);
-wallMesh6.position.set(-60, 2.3, -112); // set position of wall
+wallMesh6.position.set(-60, 2.3, -111.85); // set position of wall
 scene.add(wallMesh6);
 
 const wallMesh7 = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -526,8 +525,8 @@ document.addEventListener('keyup', function(event) {
 
 document.addEventListener("click", function() {
     audioCtx.resume();
-    sound.play();
-    sound.setLoop( true );
+    //sound.play();
+    sound.setLoop(false);
     soundCarMuscle.play();
     soundCarMuscle.setLoop( true );
     soundFountain.play();
@@ -536,8 +535,16 @@ document.addEventListener("click", function() {
     soundRollercoaster.setLoop( true );
 });
 
+const characterPosition = new THREE.Vector3(-78, 0.11, -10);
+const distanceToShow = 3.5;
+const nearCharacter = document.getElementById('near-character');
+
+
 var animate = function () {
     requestAnimationFrame( animate );
+    if (mixer) {
+      mixer.update(clock.getDelta());
+      }
     if (mixerFountain) {
         mixerFountain.update(clock.getDelta());
       }
@@ -577,6 +584,19 @@ var animate = function () {
     //gain_PoliceOfficer.gain.value = Math.max(0, 1 - (distance_PoliceOfficer / maxDistance_PoliceOfficer))
     //panner_PoliceOfficer.setPosition(camera.position.x, camera.position.y, camera.position.z);
     
+      // Check the distance to the character object
+  const distanceToCharacter = camera.position.distanceTo(characterPosition);
+  if (distanceToCharacter < distanceToShow) {
+    nearCharacter.style.display = 'block';
+  } else {
+    nearCharacter.style.display = 'none';
+  }
+  if (distanceToCharacter < distanceToShow) {
+    sound.play();
+    sound.setLoop(false);
+  } else {
+  }
+
     renderer.render( scene, camera );
 
 }
