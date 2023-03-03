@@ -403,9 +403,10 @@ camera.add( listener );
 // create the PositionalAudio object (passing in the listener)
 const sound = new THREE.PositionalAudio( listener );
 
+let audioFile = 'audio/police_officer.wav';
 // load a sound and set it as the PositionalAudio object's buffer
 const audioLoader = new THREE.AudioLoader();
-audioLoader.load( 'audio/police_officer.wav', function( buffer ) {
+audioLoader.load( audioFile, function( buffer ) {
 	sound.setBuffer( buffer );
 	sound.setRefDistance( 0.1 );
   sound.setMaxDistance( 0.01 );
@@ -538,6 +539,30 @@ document.addEventListener("click", function() {
 const characterPosition = new THREE.Vector3(-78, 0.11, -10);
 const distanceToShow = 3.5;
 const nearCharacter = document.getElementById('near-character');
+const characterRun = document.getElementById('character-run');
+const characterPayToll = document.getElementById('character-pay-toll');
+
+function changeAudio() {
+  console.log('Button clicked!');
+
+  // stop the audio playback
+  sound.stop();
+
+  // toggle between the two audio files
+  audioFile = 'audio/siren.wav';
+
+  // load the new audio file and set it as the PositionalAudio object's buffer
+  audioLoader.load( audioFile, function( buffer ) {
+    sound.setBuffer( buffer );
+    sound.setRefDistance( 0.1 );
+    sound.setMaxDistance( 0.01 );
+    sound.setRollOffFactor( 0.1 );
+  });
+}
+
+// register the event listener for the click event
+const selectCharacterRun = document.getElementById('select-character-run');
+selectCharacterRun.addEventListener('click', changeAudio);
 
 var animate = function () {
     requestAnimationFrame( animate );
@@ -590,6 +615,8 @@ var animate = function () {
     nearCharacter.style.display = 'block';
   } else {
     nearCharacter.style.display = 'none';
+    characterRun.style.display = 'none';
+    characterPayToll.style.display = 'none';
   }
   if (distanceToCharacter < distanceToShow) {
     sound.play();
@@ -600,8 +627,6 @@ var animate = function () {
     soundCarMuscle.play();
   } else {
   }
-
-  
 
     renderer.render( scene, camera );
 
