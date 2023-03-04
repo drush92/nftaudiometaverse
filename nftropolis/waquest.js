@@ -582,6 +582,24 @@ scene.add( meshSoldier );
 
 meshSoldier.add( soundSoldier );
 
+const soundBasketballPlayer = new THREE.PositionalAudio( listener );
+const audioLoaderBasketballPlayer = new THREE.AudioLoader();
+audioLoaderBasketballPlayer.load( 'audio/basketball_player.wav', function( buffer ) {
+  soundBasketballPlayer.setBuffer( buffer );
+  soundBasketballPlayer.setLoop( false );
+  soundBasketballPlayer.setRefDistance( 0.1 );
+  soundBasketballPlayer.setMaxDistance( 0.01 );
+  soundBasketballPlayer.setRollOffFactor( 0.1 );
+});
+
+const sphereBasketballPlayer = new THREE.SphereGeometry( 0.001, 0.001, 0.001 );
+const materialBasketballPlayer = new THREE.MeshPhongMaterial( { color: 0xff2200 } );
+const meshBasketballPlayer = new THREE.Mesh( sphereBasketballPlayer, materialBasketballPlayer );
+meshBasketballPlayer.position.set(-45, 0.11, -44);
+scene.add( meshBasketballPlayer );
+
+meshBasketballPlayer.add( soundBasketballPlayer );
+
 const soundCarMuscle = new THREE.PositionalAudio( listener );
 
 // load a sound and set it as the PositionalAudio object's buffer
@@ -685,7 +703,7 @@ document.addEventListener('keyup', function(event) {
 
 document.addEventListener("click", function() {
     audioCtx.resume();
-    //sound.play();
+    soundBasketballPlayer.setLoop( false );
     sound.setLoop(false);
     //soundCarMuscle.play();
     //soundCarMuscle.setLoop( true );
@@ -701,33 +719,59 @@ const nearCharacter = document.getElementById('near-character');
 const characterRun = document.getElementById('character-run');
 const characterPayToll = document.getElementById('character-pay-toll');
 const nearSoldier = document.getElementById('near-soldier');
+const soldierWhatIsTestDrill = document.getElementById('soldier-what-is-test-drill');
 
 // register the event listener for the click event
-const selectCharacterRun = document.getElementById('select-character-run');
 
-selectCharacterRun.addEventListener('click', function() {
-  console.log('Button clicked!');
 
-  // toggle between the two audio files
-  if (sound.isPlaying) {
-    sound.stop();
-    audioLoader.load('audio/siren.wav', function(buffer) {
-      sound.setBuffer(buffer);
-      sound.setRefDistance(0.1);
-      sound.setMaxDistance(0.01);
-      sound.setRollOffFactor(0.1);
-      sound.play();
-    });
+let characterPlayedSound = false;
+let basketballPlayerSoundPlayed = false;
+let soldierSoundPlayed = false;
+
+function updateSounds() {
+  const distanceToCharacter = camera.position.distanceTo(characterPosition);
+  const distanceToCarMuscle = camera.position.distanceTo(carMuscle.position);
+  const distanceToSoldier = camera.position.distanceTo(soldier.position);
+  const distanceToBasketetballPlayer = camera.position.distanceTo(basketballPlayer.position);
+  if (distanceToCharacter < distanceToShow) {
+    nearCharacter.style.display = 'block';
+    sound.play();
+    sound.setLoop(false);
   } else {
-    sound.stop();
-    audioLoader.load('audio/police_officer.wav', function(buffer) {
-      sound.setBuffer(buffer);
-      sound.setRefDistance(0.1);
-      sound.setMaxDistance(0.01);
-      sound.setRollOffFactor(0.1);
-      sound.play();
-    });
+    nearCharacter.style.display = 'none';
+    characterRun.style.display = 'none';
+    characterPayToll.style.display = 'none';
   }
+  if (distanceToBasketetballPlayer < distanceToShow) {
+    if (!basketballPlayerSoundPlayed) {
+      soundBasketballPlayer.play();
+      soundBasketballPlayer.setLoop( false );
+      basketballPlayerSoundPlayed = true;
+    }
+  } else {
+    basketballPlayerSoundPlayed = false;
+  }
+  if (distanceToCarMuscle < distanceToShow) {
+    soundCarMuscle.play();
+  } else {
+  }
+  if (distanceToSoldier < distanceToShow) {
+    nearSoldier.style.display = 'block';
+    soundSoldier.setLoop(false);
+    if (soundSoldier.isPlaying === false && soldierSoundPlayed === false) {
+      soundSoldier.play();
+      soldierSoundPlayed = true;
+    }
+  } else {
+    nearSoldier.style.display = 'none';
+    soldierWhatIsTestDrill.style.display = 'none';
+    soldierSoundPlayed = false;
+  }
+}
+
+// Call updateSounds whenever the camera moves
+controls.addEventListener('change', function() {
+  updateSounds();
 });
 
 
@@ -778,33 +822,8 @@ var animate = function () {
     //panner_PoliceOfficer.setPosition(camera.position.x, camera.position.y, camera.position.z);
     
       // Check the distance to the character object
-  const distanceToCharacter = camera.position.distanceTo(characterPosition);
-  const distanceToCarMuscle = camera.position.distanceTo(carMuscle.position);
-  const distanceToSoldier = camera.position.distanceTo(soldier.position);
-  if (distanceToCharacter < distanceToShow) {
-    nearCharacter.style.display = 'block';
-    sound.play();
-    sound.setLoop(false);
-  } else {
-    nearCharacter.style.display = 'none';
-    characterRun.style.display = 'none';
-    characterPayToll.style.display = 'none';
-  }
-  if (distanceToCharacter < distanceToShow) {
-    
-  } else {
-  }
-  if (distanceToCarMuscle < distanceToShow) {
-    soundCarMuscle.play();
-  } else {
-  }
+  
 
-  if (distanceToSoldier < distanceToShow) {
-    nearSoldier.style.display = 'block';
-    soundSoldier.play();
-  } else {
-    nearSoldier.style.display = 'none';
-  }
 
 
     renderer.render( scene, camera );
