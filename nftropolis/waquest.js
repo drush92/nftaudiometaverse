@@ -61,6 +61,9 @@ var market;
 var statue;
 var fountain;
 var mixerFountain;
+var fenceChain;
+var armyHelipad;
+var armyWoodTower;
 var rollercoaster;
 var mixerRollercoaster;
 
@@ -68,9 +71,11 @@ var buildingFlats;
 var buildingWoka;
 var buildingWoodbros;
 var buildingShop;
+var armyBunker;
 
 var tank;
 var helicopter;
+var armyJet;
 var carMuscle;
 var carPolice;
 var mixerCarPolice;
@@ -143,6 +148,97 @@ loader_fountain.load( './fountain/scene.gltf', function ( gltf ) {
     });
 });
 
+
+var loader_fenceChain = new GLTFLoader();
+loader_fenceChain.load( './fence_chain/scene.gltf', function ( gltf ) {
+    fenceChain = gltf.scene.clone();
+    fenceChain.scale.set(2.5, 2.5, 2.5);
+    fenceChain.position.set(-187.8, 0, -68);
+    fenceChain.rotateY(0);
+    scene.add( fenceChain );
+    
+    var clonedFenceChain = fenceChain.clone();
+    clonedFenceChain.position.set(-180.4, 0, -68);
+    scene.add(clonedFenceChain);
+
+    var clonedFenceChain2 = fenceChain.clone();
+    clonedFenceChain2.position.set(-173, 0, -68);
+    scene.add(clonedFenceChain2);
+
+    var clonedFenceChain3 = fenceChain.clone();
+    clonedFenceChain3.position.set(-165.6, 0, -68);
+    scene.add(clonedFenceChain3);
+
+    var clonedFenceChain4 = fenceChain.clone();
+    clonedFenceChain4.position.set(-158.2, 0, -68);
+    scene.add(clonedFenceChain4);
+
+    var clonedFenceChain5 = fenceChain.clone();
+    clonedFenceChain5.position.set(-150.8, 0, -68);
+    scene.add(clonedFenceChain5);
+
+    var clonedFenceChain6 = fenceChain.clone();
+    clonedFenceChain6.position.set(-148.2, 0, -73);
+    clonedFenceChain6.rotateY(Math.PI / 2);
+    scene.add(clonedFenceChain6);
+
+    var clonedFenceChain7 = fenceChain.clone();
+    clonedFenceChain7.position.set(-148.2, 0, -80.4);
+    clonedFenceChain7.rotateY(Math.PI / 2);
+    scene.add(clonedFenceChain7);
+
+    /*
+    var clonedFenceChain8 = fenceChain.clone();
+    clonedFenceChain8.position.set(-148.2, 0, -87.8);
+    clonedFenceChain8.rotateY(Math.PI / 2);
+    scene.add(clonedFenceChain8);
+    */
+
+    var clonedFenceChain9 = fenceChain.clone();
+    clonedFenceChain9.position.set(-148.2, 0, -95.2);
+    clonedFenceChain9.rotateY(Math.PI / 2);
+    scene.add(clonedFenceChain9);
+
+    var clonedFenceChain10 = fenceChain.clone();
+    clonedFenceChain10.position.set(-148.2, 0, -102.6);
+    clonedFenceChain10.rotateY(Math.PI / 2);
+    scene.add(clonedFenceChain10);
+
+    var clonedFenceChain11 = fenceChain.clone();
+    clonedFenceChain11.position.set(-148.2, 0, -110);
+    clonedFenceChain11.rotateY(Math.PI / 2);
+    scene.add(clonedFenceChain11);
+});
+
+var loader_armyHelipad = new GLTFLoader();
+loader_armyHelipad.load( './army_helipad/scene.gltf', function ( gltf ) {
+    armyHelipad = gltf.scene;
+    scene.add( armyHelipad );
+    armyHelipad.scale.set(0.2, 0.25, 0.25);
+    armyHelipad.position.set(-175, 0.5, -88);
+    armyHelipad.rotateY(0);
+    mixerArmyHelipad = new THREE.AnimationMixer(armyHelipad);
+});
+
+var loader_armyWoodTower = new GLTFLoader();
+loader_armyWoodTower.load( './army_wood_tower/scene.gltf', function ( gltf ) {
+    armyWoodTower = gltf.scene.clone();
+    scene.add( armyWoodTower );
+    armyWoodTower.scale.set(1.5, 1.5, 1.5);
+    armyWoodTower.position.set(-190.4, 0, -71);
+    armyWoodTower.rotateY( Math.PI / 2);
+
+    var clonedArmyWoodTower = armyWoodTower.clone();
+    clonedArmyWoodTower.position.set(-150.25, 0, -71);
+    clonedArmyWoodTower.rotateY( Math.PI / 2);
+    scene.add(clonedArmyWoodTower);
+
+    var clonedArmyWoodTower2 = armyWoodTower.clone();
+    clonedArmyWoodTower2.position.set(-150.25, 0, -108);
+    clonedArmyWoodTower2.rotateY( Math.PI / 1);
+    scene.add(clonedArmyWoodTower2);
+});
+
 var loader_rollercoaster = new GLTFLoader();
 loader_rollercoaster.load( './rollercoaster/scene.gltf', function ( gltf ) {
     rollercoaster = gltf.scene;
@@ -159,12 +255,17 @@ loader_rollercoaster.load( './rollercoaster/scene.gltf', function ( gltf ) {
 
 var loader_buildingFlats = new GLTFLoader();
 loader_buildingFlats.load( './building_flats/scene.gltf', function ( gltf ) {
-    buildingFlats = gltf.scene;
+    buildingFlats = gltf.scene.clone();
     scene.add( buildingFlats );
     buildingFlats.scale.set(1, 1, 1);
     buildingFlats.position.set(6.2, 0, 6);
     buildingFlats.rotateY(0);
     scene.add( buildingFlats );
+
+    var clonedBuildingFlats = buildingFlats.clone();
+    clonedBuildingFlats.position.set(-80, 0, -95);
+    clonedBuildingFlats.rotateY( Math.PI / 2);
+    scene.add(clonedBuildingFlats);
 });
 
 var loader_buildingWoka = new GLTFLoader();
@@ -197,6 +298,27 @@ loader_buildingShop.load( './building_shop/scene.gltf', function ( gltf ) {
     scene.add( buildingShop );
 });
 
+var loader_armyBunker = new GLTFLoader();
+loader_armyBunker.load( './army_bunker/scene.gltf', function ( gltf ) {
+    armyBunker = gltf.scene.clone();
+    scene.add( armyBunker );
+    armyBunker.scale.set(6, 6, 6);
+    armyBunker.position.set(-158, 0, -74);
+    armyBunker.rotateY(0);
+    scene.add( armyBunker );
+
+    var clonedArmyBunker = armyBunker.clone();
+    clonedArmyBunker.position.set(-170, 0, -74);
+    clonedArmyBunker.rotateY(0);
+    scene.add(clonedArmyBunker);
+
+    var clonedArmyBunker2 = armyBunker.clone();
+    clonedArmyBunker2.position.set(-182, 0, -74);
+    clonedArmyBunker2.rotateY(0);
+    scene.add(clonedArmyBunker2);
+
+});
+
 var loader_tank = new GLTFLoader();
 loader_tank.load( './tank/scene.gltf', function ( gltf ) {
     tank = gltf.scene;
@@ -216,6 +338,26 @@ loader_helicopter.load( './helicopter/scene.gltf', function ( gltf ) {
     helicopter.rotateY(0);
     scene.add( helicopter );
 });
+
+var loader_armyJet = new GLTFLoader();
+loader_armyJet.load( './army_jet/scene.gltf', function ( gltf ) {
+    armyJet = gltf.scene.clone();
+    scene.add( armyJet );
+    armyJet.scale.set(0.05, 0.05, 0.05)
+    armyJet.position.set(-160, 8, -103);
+    armyJet.rotateY(-1.5 );
+    scene.add( armyJet );
+
+    var clonedArmyJet = armyJet.clone();
+    clonedArmyJet.position.set(-170, 8, -103);
+    scene.add(clonedArmyJet);
+
+    var clonedArmyJet2 = armyJet.clone();
+    clonedArmyJet2.position.set(-180, 8, -103);
+    scene.add(clonedArmyJet2);
+});
+
+
 
 var loader_carMuscle = new GLTFLoader();
 loader_carMuscle.load( './car_muscle/scene.gltf', function ( gltf ) {
@@ -560,27 +702,36 @@ const characterRun = document.getElementById('character-run');
 const characterPayToll = document.getElementById('character-pay-toll');
 const nearSoldier = document.getElementById('near-soldier');
 
-function changeAudio() {
-  console.log('Button clicked!');
-
-  // stop the audio playback
-  sound.stop();
-
-  // toggle between the two audio files
-  audioFile = 'audio/siren.wav';
-
-  // load the new audio file and set it as the PositionalAudio object's buffer
-  audioLoader.load( audioFile, function( buffer ) {
-    sound.setBuffer( buffer );
-    sound.setRefDistance( 0.1 );
-    sound.setMaxDistance( 0.01 );
-    sound.setRollOffFactor( 0.1 );
-  });
-}
-
 // register the event listener for the click event
 const selectCharacterRun = document.getElementById('select-character-run');
-selectCharacterRun.addEventListener('click', changeAudio);
+
+selectCharacterRun.addEventListener('click', function() {
+  console.log('Button clicked!');
+
+  // toggle between the two audio files
+  if (sound.isPlaying) {
+    sound.stop();
+    audioLoader.load('audio/siren.wav', function(buffer) {
+      sound.setBuffer(buffer);
+      sound.setRefDistance(0.1);
+      sound.setMaxDistance(0.01);
+      sound.setRollOffFactor(0.1);
+      sound.play();
+    });
+  } else {
+    sound.stop();
+    audioLoader.load('audio/police_officer.wav', function(buffer) {
+      sound.setBuffer(buffer);
+      sound.setRefDistance(0.1);
+      sound.setMaxDistance(0.01);
+      sound.setRollOffFactor(0.1);
+      sound.play();
+    });
+  }
+});
+
+
+
 
 var animate = function () {
     requestAnimationFrame( animate );
@@ -688,6 +839,9 @@ BUILDINGS & PROPS:
 "Old City Building" (https://skfb.ly/6ZRtK) by Steve Morrison is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
 "Background building 3" (https://skfb.ly/oCKGN) by Trueno is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "#15 "The Fall" 3December2019" (https://skfb.ly/6SorR) by Canary Games is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+"Chainlink Fences (Mid-Poly)" (https://sketchfab.com/3d-models/chainlink-fences-mid-poly-b79e24cad33340da9b0f1e91901840bb) by Tiko (https://sketchfab.com/tikoavp) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+"Army_Wood_Tower" (https://sketchfab.com/3d-models/army-wood-tower-d78fa9daa7d4450d93f6d63f79e8463e) by BlackSpire (https://sketchfab.com/blackspire) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+"'Stekelvarken S3' Kazemat (Dutch WWII bunker)" (https://sketchfab.com/3d-models/stekelvarken-s3-kazemat-dutch-wwii-bunker-f409a77deaaf4e3888d47f76ec48dbdd) by Sjoerd van Riel (https://sketchfab.com/sjoerdnijkerk) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 
 VEHICLES:
 "Transformers Universe: Army Truck" (https://skfb.ly/otyvo) by Primus03 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).

@@ -1,0 +1,11 @@
+Model Information:
+* title:	E-58
+* source:	https://sketchfab.com/3d-models/e-58-bce1e26a51894f77b81784f14b59303b
+* author:	efkz (https://sketchfab.com/efkz)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "E-58" (https://sketchfab.com/3d-models/e-58-bce1e26a51894f77b81784f14b59303b) by efkz (https://sketchfab.com/efkz) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
