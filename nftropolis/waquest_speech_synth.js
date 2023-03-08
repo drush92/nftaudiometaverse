@@ -721,7 +721,63 @@ const characterPayToll = document.getElementById('character-pay-toll');
 const nearSoldier = document.getElementById('near-soldier');
 const soldierWhatIsTestDrill = document.getElementById('soldier-what-is-test-drill');
 
-// register the event listener for the click event
+
+// Define the dialogues
+const dialogues = {
+  nearCharacter: "Welcome to NFTropolis citizen. Look, I know you're new here, but you're going to have to pay the toll to get into the city.",
+  characterRun: "Bad things can happen in NFTropolis. You're on your own kid, don't expect me to help you when you're in trouble.",
+  characterPayToll: "Good choice. Bad things happen in NFTropolis and you can count on me to help you out, as long as you pay your tolls."
+};
+
+// Create a SpeechSynthesisUtterance object for each dialogue
+const dialogueUtterances = {};
+Object.keys(dialogues).forEach(dialogueKey => {
+  dialogueUtterances[dialogueKey] = new SpeechSynthesisUtterance(dialogues[dialogueKey]);
+});
+
+// Function to handle speech synthesis logic
+function speechSynthCharacter() {
+  const distanceToCharacter = camera.position.distanceTo(characterPosition);
+  if (distanceToCharacter < distanceToShow) {
+    nearCharacter.style.display = 'block';
+    window.speechSynthesis.speak(dialogueUtterances.nearCharacter);
+  } else {
+    window.speechSynthesis.cancel();
+    nearCharacter.style.display = 'none';
+    characterRun.style.display = 'none';
+    characterPayToll.style.display = 'none';
+  }
+}
+
+// Call speechSynthCharacter whenever the camera moves
+controls.addEventListener('change', function() {
+  speechSynthCharacter();
+  speechSynthesis.onend = function() {
+    speechSynthesis.cancel();
+  }
+});
+
+// Get the button elements
+const btnRun = document.getElementById('select-character-run');
+const btnPayToll = document.getElementById('select-character-pay-toll');
+
+// Add event listeners to the buttons
+btnRun.addEventListener('click', function() {
+  speechSynthesis.cancel();
+  window.speechSynthesis.speak(dialogueUtterances.characterRun);
+  speechSynthesis.onend = function() {
+    speechSynthesis.cancel();
+  }
+  
+});
+
+btnPayToll.addEventListener('click', function() {
+  speechSynthesis.cancel();
+  window.speechSynthesis.speak(dialogueUtterances.characterPayToll);
+  speechSynthesis.onend = function() {
+    speechSynthesis.cancel();
+  }
+});
 
 
 let characterPlayedSound = false;
@@ -729,23 +785,10 @@ let basketballPlayerSoundPlayed = false;
 let soldierSoundPlayed = false;
 
 function updateSounds() {
-  const distanceToCharacter = camera.position.distanceTo(characterPosition);
   const distanceToCarMuscle = camera.position.distanceTo(carMuscle.position);
   const distanceToSoldier = camera.position.distanceTo(soldier.position);
   const distanceToBasketetballPlayer = camera.position.distanceTo(basketballPlayer.position);
-  if (distanceToCharacter < distanceToShow) {
-    nearCharacter.style.display = 'block';
-    sound.setLoop(false);
-    if (sound.isPlaying === false && characterPlayedSound === false) {
-      sound.play();
-      characterPlayedSound = true;
-    }
-  } else {
-    characterPlayedSound = false;
-    nearCharacter.style.display = 'none';
-    characterRun.style.display = 'none';
-    characterPayToll.style.display = 'none';
-  }
+  
   if (distanceToBasketetballPlayer < distanceToShow) {
     if (!basketballPlayerSoundPlayed) {
       soundBasketballPlayer.play();
@@ -773,10 +816,14 @@ function updateSounds() {
   }
 }
 
+
+
 // Call updateSounds whenever the camera moves
 controls.addEventListener('change', function() {
   updateSounds();
 });
+
+
 
 
 
@@ -826,7 +873,13 @@ var animate = function () {
     //panner_PoliceOfficer.setPosition(camera.position.x, camera.position.y, camera.position.z);
     
       // Check the distance to the character object
-  
+        
+      speechSynthCharacter();
+      speechSynthCharacter.onend = function() {
+        speechSynthesis.cancel();
+      }
+
+      
 
 
 
