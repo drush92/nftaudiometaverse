@@ -768,7 +768,7 @@ function updateSounds() {
     }
   } else {
     nearSoldier.style.display = 'none';
-    soldierWhatIsTestDrill.style.display = 'none'; 
+    soldierWhatIsTestDrill.style.display = 'none';
     soldierSoundPlayed = false;
   }
 }
