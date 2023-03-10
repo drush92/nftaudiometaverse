@@ -93,11 +93,6 @@ var mixerSoldier;
 var hoodie;
 var mixerHoodie;
 
-var bandGuitar;
-var mixerBandGuitar;
-var bandSinger;
-var mixerBandSinger;
-
 const clock = new THREE.Clock();
 
 const loader = new THREE.TextureLoader();
@@ -469,33 +464,6 @@ loader_hoodie.load( './hoodie/scene.gltf', function ( gltf ) {
     }
 });
 
-var loader_bandGuitar = new GLTFLoader();
-loader_bandGuitar.load( './band_guitar/scene.gltf', function ( gltf ) {
-    bandGuitar = gltf.scene;
-    scene.add( bandGuitar );
-    bandGuitar.scale.set(0.75, 0.75, 0.75);
-    bandGuitar.position.set(-100, 0, -25);
-    mixerBandGuitar = new THREE.AnimationMixer( bandGuitar );
-    const clipsBandGuitar = gltf.animations;
-    clipsBandGuitar.forEach((clip) => {
-        mixerBandGuitar.clipAction(clip).play();
-    });
-});
-
-var loader_bandSinger = new GLTFLoader();
-loader_bandSinger.load( './band_singer/scene.gltf', function ( gltf ) {
-    bandSinger = gltf.scene;
-    scene.add( bandSinger );
-    bandSinger.scale.set(0.75, 0.75, 0.75);
-    bandSinger.position.set(-95, 0, -25);
-    mixerBandSinger = new THREE.AnimationMixer( bandSinger );
-    const clipsBandSinger = gltf.animations;
-    clipsBandSinger.forEach((clip) => {
-        mixerBandSinger.clipAction(clip).play();
-    });
-});
-
-
 // create surrounding wall geometry and material
 const wallGeometry = new THREE.BoxGeometry(120, 4.6, 0.5);
 const wallMaterial = new THREE.MeshBasicMaterial({
@@ -632,40 +600,6 @@ scene.add( meshBasketballPlayer );
 
 meshBasketballPlayer.add( soundBasketballPlayer );
 
-const soundBandGuitar = new THREE.PositionalAudio( listener );
-const audioLoaderBandGuitar = new THREE.AudioLoader();
-audioLoaderBandGuitar.load( 'audio/band_guitar.wav', function( buffer ) {
-  soundBandGuitar.setBuffer( buffer );
-  soundBandGuitar.setRefDistance( 0.1 );
-  soundBandGuitar.setMaxDistance( 0.01 );
-  soundBandGuitar.setRollOffFactor( 0.1 );
-});
-
-const sphereBandGuitar = new THREE.SphereGeometry( 0.001, 0.001, 0.001 );
-const materialBandGuitar = new THREE.MeshPhongMaterial( { color: 0xff2200 } );
-const meshBandGuitar = new THREE.Mesh( sphereBandGuitar, materialBandGuitar );
-meshBandGuitar.position.set(-100, 0, -25);
-scene.add( meshBandGuitar );
-
-meshBandGuitar.add( soundBandGuitar );
-
-const soundBandSinger = new THREE.PositionalAudio( listener );
-const audioLoaderBandSinger = new THREE.AudioLoader();
-audioLoaderBandSinger.load( 'audio/band_vocals.wav', function( buffer ) {
-  soundBandSinger.setBuffer( buffer );
-  soundBandSinger.setRefDistance( 0.1 );
-  soundBandSinger.setMaxDistance( 0.01 );
-  soundBandSinger.setRollOffFactor( 0.1 );
-});
-
-const sphereBandSinger = new THREE.SphereGeometry( 0.001, 0.001, 0.001 );
-const materialBandSinger = new THREE.MeshPhongMaterial( { color: 0xff2200 } );
-const meshBandSinger = new THREE.Mesh( sphereBandSinger, materialBandSinger );
-meshBandSinger.position.set(-95, 0, -25);
-scene.add( meshBandSinger );
-
-meshBandSinger.add( soundBandSinger );
-
 const soundCarMuscle = new THREE.PositionalAudio( listener );
 
 // load a sound and set it as the PositionalAudio object's buffer
@@ -770,10 +704,6 @@ document.addEventListener('keyup', function(event) {
 document.addEventListener("click", function() {
     audioCtx.resume();
     soundBasketballPlayer.setLoop( false );
-    soundBandGuitar.play();
-    soundBandGuitar.setLoop( true );
-    soundBandSinger.play();
-    soundBandSinger.setLoop( true );
     sound.setLoop(false);
     //soundCarMuscle.play();
     //soundCarMuscle.setLoop( true );
@@ -800,19 +730,10 @@ const dialogues = {
 };
 
 // Create a SpeechSynthesisUtterance object for each dialogue
-var dialogueUtterances = {};
+const dialogueUtterances = {};
 Object.keys(dialogues).forEach(dialogueKey => {
   dialogueUtterances[dialogueKey] = new SpeechSynthesisUtterance(dialogues[dialogueKey]);
-  dialogueUtterances[dialogueKey].voice = speechSynthesis.getVoices()[0];
-  dialogueUtterances[dialogueKey].lang = 'en-US';
-  dialogueUtterances[dialogueKey].rate = 1.1;
-  dialogueUtterances[dialogueKey].volume = 0.5;
-  dialogueUtterances[dialogueKey].pitch = 1;
 });
-
-dialogueUtterances.onend = function() {
-  speechSynthesis.cancel();
-}
 
 // Function to handle speech synthesis logic
 function speechSynthCharacter() {
@@ -826,10 +747,15 @@ function speechSynthCharacter() {
     characterRun.style.display = 'none';
     characterPayToll.style.display = 'none';
   }
-  
 }
 
-
+// Call speechSynthCharacter whenever the camera moves
+controls.addEventListener('change', function() {
+  speechSynthCharacter();
+  speechSynthesis.onend = function() {
+    speechSynthesis.cancel();
+  }
+});
 
 // Get the button elements
 const btnRun = document.getElementById('select-character-run');
@@ -839,8 +765,7 @@ const btnPayToll = document.getElementById('select-character-pay-toll');
 btnRun.addEventListener('click', function() {
   speechSynthesis.cancel();
   window.speechSynthesis.speak(dialogueUtterances.characterRun);
-
-    dialogueUtterances[dialogueKey].onend = function() {
+  speechSynthesis.onend = function() {
     speechSynthesis.cancel();
   }
   
@@ -849,10 +774,11 @@ btnRun.addEventListener('click', function() {
 btnPayToll.addEventListener('click', function() {
   speechSynthesis.cancel();
   window.speechSynthesis.speak(dialogueUtterances.characterPayToll);
-  dialogueUtterances[dialogueKey].onend = function() {
+  speechSynthesis.onend = function() {
     speechSynthesis.cancel();
   }
 });
+
 
 let characterPlayedSound = false;
 let basketballPlayerSoundPlayed = false;
@@ -941,14 +867,6 @@ var animate = function () {
         mixerHoodie.update(clock.getDelta());
         }
         mixerHoodie.timeScale = 100;
-    if (mixerBandGuitar) {
-        mixerBandGuitar.update(clock.getDelta());
-        }
-        mixerBandGuitar.timeScale = 60;
-    if (mixerBandSinger) {
-        mixerBandSinger.update(clock.getDelta());
-        }
-        mixerBandSinger.timeScale = 600;
     //var distance_PoliceOfficer = camera.position.distanceTo(character.position);
     //var maxDistance_PoliceOfficer = 10;
     //gain_PoliceOfficer.gain.value = Math.max(0, 1 - (distance_PoliceOfficer / maxDistance_PoliceOfficer))
@@ -956,12 +874,12 @@ var animate = function () {
     
       // Check the distance to the character object
         
-      
-      
+      speechSynthCharacter();
+      speechSynthCharacter.onend = function() {
+        speechSynthesis.cancel();
+      }
 
       
-      
-      speechSynthCharacter();
 
 
 
@@ -1012,7 +930,6 @@ CHARACTERS:
 "Looking around medical" (https://skfb.ly/ouzT8) by Appsbypaulhamilton is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Business Man - Low Polygon game character" (https://skfb.ly/6Ezvq) by manoeldarochadeoliveira is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Girl / Woman Character + Skeleton (.FBX & .OBJ)" (https://skfb.ly/oDRG9) by samsikua is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-"Man Guitar" (https://skfb.ly/oEznX) by LostBoyz2078 is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
 
 SOUND:
 Fairgrounds: Rides - Cobra rollercoaster - from side of track - May '1985 (recorded West Midlands Safari Park) (5F4,reprocessed)- https://sound-effects.bbcrewind.co.uk/search?q=rollercoaster
